@@ -76,7 +76,7 @@ func copyWasmExec(destDir string) error {
     if goPath == "" {
         goPath = filepath.Join(os.Getenv("HOME"), "go") // 默认 GOPATH
     }
-    wasmExecPath := filepath.Join(goPath, "pkg", "mod", "github.com", "golang", "go@latest", "syscall", "js", "wasm_exec.js")
+    wasmExecPath := filepath.Join(goPath, "misc", "wasm", "wasm_exec.js")
 
     if _, err := os.Stat(wasmExecPath); os.IsNotExist(err) {
         return fmt.Errorf("wasm_exec.js not found at %s\n", wasmExecPath)
