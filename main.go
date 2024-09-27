@@ -72,8 +72,7 @@ func findMainGoFile() (string, error) {
 
 // copyWasmExec 复制 wasm_exec.js 到指定目录
 func copyWasmExec(destDir string) error {
-    originGoPath := os.Getenv("GOROOT")
-    goPath := strings.Replace(originGoPath, "path", "", 1)
+    goPath, _ := getGoRoot()
     if goPath == "" {
         goPath = filepath.Join(os.Getenv("HOME"), "go") // 默认 goPath
     }
@@ -98,4 +97,23 @@ func copyWasmExec(destDir string) error {
 
     _, err = io.Copy(destinationFile, sourceFile)
     return err
+}
+
+// getGoRoot 根据 gofmt 的位置确定 Go 的主目录
+func getGoRoot() (string, error) {
+    var cmd *exec.Cmd
+    if runtime.GOOS == "windows" {
+        cmd = exec.Command("where", "gofmt")
+    } else {
+        cmd = exec.Command("which", "gofmt")
+    }
+    
+    output, err := cmd.Output()
+    if err != nil {
+        return "", err
+    }
+
+    gofmtPath := strings.TrimSpace(string(output))
+    goRoot := filepath.Dir(filepath.Dir(gofmtPath)) // 上两级目录为 Go 根目录
+    return goRoot, nil
 }
