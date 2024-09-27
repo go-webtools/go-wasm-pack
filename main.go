@@ -72,7 +72,7 @@ func findMainGoFile() (string, error) {
 
 // copyWasmExec 复制 wasm_exec.js 到指定目录
 func copyWasmExec(destDir string) error {
-    originGoPath := os.Getenv("goPath")
+    originGoPath := os.Getenv("GOPATH")
     goPath := strings.Replace(originGoPath, "path", "", 1)
     if goPath == "" {
         goPath = filepath.Join(os.Getenv("HOME"), "go") // 默认 goPath
